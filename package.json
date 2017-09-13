@@ -4,7 +4,23 @@
   "version": "0.2.0",
   "description": "Go language support for Atom-IDE.",
   "repository": "https://github.com/ckaznocha/ide-go",
-  "keywords": [],
+  "author": {
+    "name": "Clifton Kaznocha",
+    "email": "clifton@kaznocha.com",
+    "url": "https://clifton.kaznocha.com/"
+  },
+  "homepage": "https://atom.io/packages/ide-go",
+  "bugs": {
+    "url": "https://github.com/ckaznocha/ide-go/issues"
+  },
+  "keywords": [
+    "atom-ide",
+    "go",
+    "golang",
+    "language-client",
+    "language-server-protocol",
+    "lsp"
+  ],
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"

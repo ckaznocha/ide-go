@@ -16,7 +16,7 @@ You should also install the [atom-ide-ui](https://atom.io/packages/atom-ide-ui) 
 
 ## TODO
 -   [x] Download go-langserver binary if not found
--   [ ] Add setting for custom binary path
+-   [x] Add setting for custom binary path
 -   [ ] Consume the busy signal Atom service
 -   [ ] tests
 
