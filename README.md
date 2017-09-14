@@ -14,12 +14,6 @@ You should also install the [atom-ide-ui](https://atom.io/packages/atom-ide-ui) 
 *   Go to definition
 *   Hover
 
-## TODO
--   [x] Download go-langserver binary if not found
--   [x] Add setting for custom binary path
--   [ ] Consume the busy signal Atom service
--   [ ] tests
-
 ## Contributing
 
 See the `CONTRIBUTING` file.

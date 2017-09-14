@@ -45,11 +45,6 @@
         "0.1.0": "consumeDatatip"
       }
     },
-    "status-bar": {
-      "versions": {
-        "^1.0.0": "consumeStatusBar"
-      }
-    },
     "go-config": {
       "versions": {
         "1.0.0": "consumeGoConfig"
@@ -62,21 +57,6 @@
     }
   },
   "providedServices": {
-    "autocomplete.provider": {
-      "versions": {
-        "2.0.0": "provideAutocomplete"
-      }
-    },
-    "code-format.range": {
-      "versions": {
-        "0.1.0": "provideCodeFormat"
-      }
-    },
-    "code-highlight": {
-      "versions": {
-        "0.1.0": "provideCodeHighlight"
-      }
-    },
     "definitions": {
       "versions": {
         "0.1.0": "provideDefinitions"
