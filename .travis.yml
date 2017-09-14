@@ -1,3 +1,9 @@
-language: objective-c
+language:        objective-c
 
-script: 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
+before_install:
+# package-lock.json was introduced in npm@5
+- npm install -g npm@5
+- npm install -g greenkeeper-lockfile@1
+before_script:   greenkeeper-lockfile-update
+after_script:    greenkeeper-lockfile-upload
+script:          'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'

@@ -1,7 +1,7 @@
 # ide-go package
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/ckaznocha/ide-go.svg)](https://greenkeeper.io/)
-
+[![Build Status](https://travis-ci.org/ckaznocha/ide-go.svg?branch=master)](https://travis-ci.org/ckaznocha/ide-go)
 [![APM Version](https://img.shields.io/apm/v/ide-go.svg)](https://atom.io/packages/ide-go)
 [![Dependency Status](https://david-dm.org/ckaznocha/ide-go.svg)](https://david-dm.org/ckaznocha/ide-go)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://ckaznocha.mit-license.org)
