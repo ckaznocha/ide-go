@@ -16,8 +16,8 @@
   "keywords": [
     "atom-ide",
     "go",
+    "go-langserver",
     "golang",
-    "language-client",
     "language-server-protocol",
     "lsp"
   ],
