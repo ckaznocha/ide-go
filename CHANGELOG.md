@@ -1,3 +1,7 @@
+## 0.4.0
+*  Downloads missing package dependencies
+*  Add support for code formatting
+
 ## 0.3.1
 *   minor refactoring
 *   README update
