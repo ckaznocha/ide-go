@@ -11,6 +11,7 @@ You should also install the [atom-ide-ui](https://atom.io/packages/atom-ide-ui) 
 
 ## Features
 
+*   Code Format
 *   Document outline
 *   Find references
 *   Go to definition
