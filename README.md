@@ -16,6 +16,7 @@ You should also install the [atom-ide-ui](https://atom.io/packages/atom-ide-ui) 
 *   Find references
 *   Go to definition
 *   Hover
+*   Code Completion
 
 ## Contributing
 
