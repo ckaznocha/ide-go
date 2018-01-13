@@ -1,6 +1,12 @@
+# Changelog
+
+## 0.5.0
+*   Upgrade atom-languageclient to 0.8.0
+*   Add autocomplete support ([@pbitty](https://github.com/pbitty))
+
 ## 0.4.0
-*  Downloads missing package dependencies
-*  Add support for code formatting
+*   Downloads missing package dependencies
+*   Add support for code formatting
 
 ## 0.3.1
 *   minor refactoring
