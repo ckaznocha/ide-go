@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.1
+*   Fix scope in call to onError
+
 ## 0.6.0
 *   Better error handling
 *   Add option to set the pprof address
