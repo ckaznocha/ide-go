@@ -1,4 +1,7 @@
 language:        objective-c
+addons:
+  ssh_known_hosts:
+  - github.com
 
 before_install:
 # package-lock.json was introduced in npm@5
