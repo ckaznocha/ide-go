@@ -2,7 +2,6 @@ import { spawn } from 'child_process'
 import { AutoLanguageClient } from 'atom-languageclient'
 import DatatipAdapter from 'atom-languageclient/build/lib/adapters/datatip-adapter'
 import Utils from 'atom-languageclient/build/lib/utils'
-import 'path'
 import { EventEmitter } from 'events'
 import { install } from 'atom-package-deps'
 import {

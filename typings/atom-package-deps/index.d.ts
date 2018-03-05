@@ -1,3 +1,3 @@
 declare module 'atom-package-deps' {
-    export function install(packageName:string):void
+    export function install(...packageNames:string[]):void
 }
