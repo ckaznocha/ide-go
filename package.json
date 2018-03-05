@@ -1,7 +1,7 @@
 {
   "name": "ide-go",
   "main": "./lib/ide-go",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Go language support for Atom-IDE.",
   "repository": "https://github.com/ckaznocha/ide-go",
   "author": {
@@ -93,13 +93,13 @@
         "0.1.0": "provideOutlines"
       }
     }
-},
-"atomTranspilers": [
+  },
+  "atomTranspilers": [
     {
       "transpiler": "atom-ts-transpiler",
       "glob": "{!(node_modules)/**/,}*.ts?(x)",
       "options": {
-        "compilerOptions": { },
+        "compilerOptions": {},
         "cacheKeyFiles": [],
         "verbose": false
       }
