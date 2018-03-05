@@ -36,15 +36,15 @@ declare namespace GoPlus {
 
     export type GoConfig = {
         executer: {
-            exec: (one: string, two: Array<string>, three: ExecutorOptions) => Promise<ExecResult>,
-            execSync: (one: string, two: Array<string>, three: ExecutorOptions) => ExecResult,
-            getOptions: (one: 'file' | 'project', two: any) => ExecutorOptions
+            exec: (command: string, args: Array<string>, options: ExecutorOptions) => Promise<ExecResult>,
+            execSync: (command: string, args: Array<string>, options: ExecutorOptions) => ExecResult,
+            getOptions: (kind: 'file' | 'project', editor: any) => ExecutorOptions
         },
         locator: {
             runtimes: () => Promise<Array<Runtime>>,
             runtime: () => Promise<false | Runtime>,
             gopath: () => string,
-            findTool: (one: string) => Promise<FindResult>
+            findTool: (name: string) => Promise<FindResult>
         },
         environment: any
     }
@@ -57,7 +57,7 @@ declare namespace GoPlus {
     }
 
     export type GoGet = {
-        get: (one: InteractiveGetOptions) => Promise<any>,
-        register: (one: string, two?: Function) => Disposable
+        get: (options: InteractiveGetOptions) => Promise<any>,
+        register: (importPath: string, callback?: Function) => Disposable
     }
 }
