@@ -1,16 +1,36 @@
-const { spawn } = require('child_process')
-const { AutoLanguageClient } = require('atom-languageclient')
-const DatatipAdapter = require('../node_modules/atom-languageclient/build/lib/adapters/datatip-adapter')
-const CodeFormatAdapter = require('../node_modules/atom-languageclient/build/lib/adapters/code-format-adapter')
-const Utils = require('../node_modules/atom-languageclient/build/lib/utils')
-const path = require('path')
-const { shell } = require('electron')
-const { EventEmitter } = require('events')
+import { spawn } from 'child_process'
+import { AutoLanguageClient } from 'atom-languageclient'
+import DatatipAdapter from 'atom-languageclient/build/lib/adapters/datatip-adapter'
+import Utils from 'atom-languageclient/build/lib/utils'
+import 'path'
+import { EventEmitter } from 'events'
+import { install } from 'atom-package-deps'
+import {
+    Point,
+    TextBuffer,
+    TextEditor as NativeTextEditor,
+    ScopeDescriptor,
+    Range
+} from 'atom'
+import { Datatip } from 'atom-ide'
+import { join } from 'path'
+import { LanguageClientConnection } from 'atom-languageclient/build/lib/languageclient'
+import { GoPlus } from '../typings/go-plus'
+
 const pkg = require('../package.json')
-const { install } = require('atom-package-deps')
+
+interface TextEditor extends NativeTextEditor {
+    getURI(): string | null
+    getBuffer(): TextBuffer
+    getNonWordCharacters(scope: ScopeDescriptor): string
+}
 
 class GoDatatipAddapter extends DatatipAdapter {
-    async getDatatip(connection, editor, point) {
+    async getDatatip(
+        connection: LanguageClientConnection,
+        editor: TextEditor,
+        point: Point
+    ): Promise<Datatip | null> {
         let res = await super.getDatatip(connection, editor, point)
         if (res) {
             res.range = Utils.getWordAtPosition(editor, point)
@@ -20,6 +40,19 @@ class GoDatatipAddapter extends DatatipAdapter {
 }
 
 class GoLanguageClient extends AutoLanguageClient {
+    datatip: GoDatatipAddapter
+    emitter: EventEmitter
+    config: {
+        [key: string]: {
+            description: string
+            type: string
+            default: string | boolean
+            order: number
+        }
+    }
+    goGet: GoPlus.GoGet | null = null
+    goConfig: GoPlus.GoConfig | null = null
+
     constructor() {
         super()
         this.datatip = new GoDatatipAddapter()
@@ -46,13 +79,13 @@ class GoLanguageClient extends AutoLanguageClient {
         }
     }
 
-    getGrammarScopes() {
+    getGrammarScopes(): string[] {
         return pkg['enhancedScopes']
     }
-    getLanguageName() {
+    getLanguageName(): string {
         return 'Go'
     }
-    getServerName() {
+    getServerName(): string {
         return 'go-langserver'
     }
 
@@ -68,23 +101,24 @@ class GoLanguageClient extends AutoLanguageClient {
             args.push(`-pprof=${atomConfig('pprofAddr')}`)
         }
 
-        const childProcess = spawn(await this.serverPath(), args, {
-            cwd: path.join(__dirname, '..'),
+        const childProcess = spawn((await this.serverPath()) as string, args, {
+            cwd: join(__dirname, '..'),
             env: process.env
         })
-        this.captureServerErrors(childProcess)
-        childProcess.on('exit', (code, signal) => this.onExit(code, signal))
+        childProcess.on('exit', (code: number, signal: string) =>
+            this.onExit(code, signal)
+        )
         return childProcess
     }
 
-    consumeGoGet(goGet) {
+    consumeGoGet(goGet: GoPlus.GoGet) {
         this.goGet = goGet
         if (this.goConfig) {
             this.emitter.emit('go-ready')
         }
     }
 
-    consumeGoConfig(goConfig) {
+    consumeGoConfig(goConfig: GoPlus.GoConfig) {
         this.goConfig = goConfig
         if (this.goGet) {
             this.emitter.emit('go-ready')
@@ -106,41 +140,23 @@ class GoLanguageClient extends AutoLanguageClient {
             return customPath
         }
         await this.goReady()
-        let serverPath = await this.goConfig.locator.findTool(
-            this.getServerName()
-        )
+        let serverPath = await (this
+            .goConfig as GoPlus.GoConfig).locator.findTool(this.getServerName())
         if (serverPath) {
             return serverPath
         }
-        await this.goGet.get({
+        await (this.goGet as GoPlus.GoGet).get({
             name: pkg['name'],
             packageName: this.getServerName(),
             packagePath: 'github.com/sourcegraph/go-langserver/',
             type: 'missing'
         })
-        return await this.goConfig.locator.findTool(this.getServerName())
-    }
-
-    handleSpawnFailure(err) {
-        atom.notifications.addError(
-            `Unable to start the ${this.getLanguageName()} language server.`,
-            {
-                dismissable: true,
-                buttons: [
-                    {
-                        text: `Download ${this.getServerName()}`,
-                        onDidClick: () =>
-                            shell.openExternal(
-                                'https://github.com/sourcegraph/go-langserver/blob/master/README.md'
-                            )
-                    }
-                ],
-                description: err.toString()
-            }
+        return await (this.goConfig as GoPlus.GoConfig).locator.findTool(
+            this.getServerName()
         )
     }
 
-    onExit(code, signal) {
+    onExit(code: number, _signal: string) {
         if (code) {
             atom.notifications.addError(
                 `${this.getLanguageName()} language server stopped unexpectedly.`,
@@ -160,27 +176,16 @@ class GoLanguageClient extends AutoLanguageClient {
         }
     }
 
-    async getFileCodeFormat(editor) {
-        const server = await this._serverManager.getServer(editor)
-        if (
-            server == null ||
-            !CodeFormatAdapter.canAdapt(server.capabilities)
-        ) {
-            return []
-        }
-        //HACK: get the first non empty 'newText'.
-        return Promise.resolve({
-            formatted: (await CodeFormatAdapter.formatDocument(
-                server.connection,
-                editor
-            )).reduce((accu, elem) => {
-                return accu || elem['newText'] || ''
-            })
-        })
+    async getFileCodeFormat(
+        editor: TextEditor,
+        range: Range
+    ): Promise<{ formatted: string }> {
+        const format = await this.getCodeFormat(editor, range)
+        return Promise.resolve({ formatted: format[1].newText })
     }
 }
 
-function atomConfig(key) {
+function atomConfig(key: string): string {
     return atom.config.get(`${pkg['name']}.${key}`)
 }
 
