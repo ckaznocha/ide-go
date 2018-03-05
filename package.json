@@ -27,7 +27,12 @@
   },
   "dependencies": {
     "atom-languageclient": "^0.9.1",
-    "atom-package-deps": "^4.6.0"
+    "atom-package-deps": "^4.6.0",
+    "@types/atom": "^1.24.1",
+    "@types/electron": "^1.6.10",
+    "@types/node": "^9.4.0",
+    "atom-ts-transpiler": "^1.4.2",
+    "typescript": "^2.7.1"
   },
   "enhancedScopes": [
     "source.go"
@@ -44,6 +49,11 @@
     "datatip": {
       "versions": {
         "0.1.0": "consumeDatatip"
+      }
+    },
+    "signature-help": {
+      "versions": {
+        "0.1.0": "consumeSignatureHelp"
       }
     },
     "go-config": {
@@ -83,5 +93,16 @@
         "0.1.0": "provideOutlines"
       }
     }
-  }
+},
+"atomTranspilers": [
+    {
+      "transpiler": "atom-ts-transpiler",
+      "glob": "{!(node_modules)/**/,}*.ts?(x)",
+      "options": {
+        "compilerOptions": { },
+        "cacheKeyFiles": [],
+        "verbose": false
+      }
+    }
+  ]
 }

@@ -1,4 +1,7 @@
 # Changelog
+## 0.7.0
+*   TypeScript rewrite
+*   Add support for signature help
 
 ## 0.6.1
 *   Fix scope in call to onError
