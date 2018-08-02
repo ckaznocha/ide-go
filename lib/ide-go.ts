@@ -15,8 +15,7 @@ import { Datatip } from 'atom-ide'
 import { join } from 'path'
 import { LanguageClientConnection } from 'atom-languageclient/build/lib/languageclient'
 import { GoPlus } from '../typings/go-plus'
-
-const pkg = require('../package.json')
+import * as pkg from '../package.json'
 
 interface TextEditor extends NativeTextEditor {
     getURI(): string | null
@@ -79,7 +78,7 @@ class GoLanguageClient extends AutoLanguageClient {
     }
 
     getGrammarScopes(): string[] {
-        return pkg['enhancedScopes']
+        return pkg.enhancedScopes
     }
     getLanguageName(): string {
         return 'Go'
@@ -89,7 +88,7 @@ class GoLanguageClient extends AutoLanguageClient {
     }
 
     async startServerProcess() {
-        await install(pkg['name'])
+        await install(pkg.name)
 
         const args = []
         if (atomConfig('completionEnabled')) {
@@ -145,7 +144,7 @@ class GoLanguageClient extends AutoLanguageClient {
             return serverPath
         }
         await (this.goGet as GoPlus.GoGet).get({
-            name: pkg['name'],
+            name: pkg.name,
             packageName: this.getServerName(),
             packagePath: 'github.com/sourcegraph/go-langserver/',
             type: 'missing'
@@ -185,7 +184,7 @@ class GoLanguageClient extends AutoLanguageClient {
 }
 
 function atomConfig(key: string): string {
-    return atom.config.get(`${pkg['name']}.${key}`)
+    return atom.config.get(`${pkg.name}.${key}`)
 }
 
 module.exports = new GoLanguageClient()
