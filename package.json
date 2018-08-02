@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@types/atom": "^1.28.0",
-    "@types/electron": "^1.6.10",
     "@types/node": "^10.0.3",
     "atom-languageclient": "^0.9.5",
     "atom-package-deps": "^4.6.2",
