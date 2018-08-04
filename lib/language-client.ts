@@ -54,6 +54,12 @@ export class GoLanguageClient extends AutoLanguageClient {
                 default: true,
                 order: 2
             },
+            diagnosticsEnabled: {
+                description: 'Enable diagnostics (extra memory burden) (requires restart)',
+                type: 'boolean',
+                default: false,
+                order: 3
+            },
             pprofAddr: {
                 description: 'pprof address (requires restart)',
                 type: 'string',

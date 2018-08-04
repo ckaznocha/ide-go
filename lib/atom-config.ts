@@ -21,6 +21,10 @@ export function getProcessArgs(): string[] {
         args.push('-gocodecompletion')
     }
 
+    if (getPluginSettingValue('diagnosticsEnabled')) {
+        args.push('-diagnostics')
+    }
+
     if (getPluginSettingValue('pprofAddr')) {
         args.push(`-pprof=${getPluginSettingValue('pprofAddr')}`)
     }
