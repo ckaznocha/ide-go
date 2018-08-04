@@ -1,4 +1,13 @@
 # Changelog
+# 0.9.0
+*   Support tree-sitter
+*   Support diagnostics, requires a newer version of go-langserver if you've
+    not updated it a while. Enable in the settings, disabled by default.
+*   Some refactoring for better types and error handling.
+
+# 0.8.0
+*   maintenance
+
 ## 0.7.0
 *   TypeScript rewrite
 *   Add support for signature help
