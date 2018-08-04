@@ -17,6 +17,15 @@ import { LanguageClientConnection } from 'atom-languageclient/build/lib/language
 import { GoPlus } from '../typings/go-plus'
 import * as pkg from '../package.json'
 
+interface AtomPluginConfig {
+    [key: string]: {
+        description: string
+        type: string
+        default: string | boolean
+        order: number
+    }
+}
+
 interface TextEditor extends NativeTextEditor {
     getURI(): string | null
     getBuffer(): TextBuffer
@@ -38,23 +47,16 @@ class GoDatatipAddapter extends DatatipAdapter {
 }
 
 class GoLanguageClient extends AutoLanguageClient {
-    datatip: GoDatatipAddapter
-    emitter: EventEmitter
-    config: {
-        [key: string]: {
-            description: string
-            type: string
-            default: string | boolean
-            order: number
-        }
-    }
-    goGet: GoPlus.GoGet | null = null
-    goConfig: GoPlus.GoConfig | null = null
+    private readonly config: AtomPluginConfig
+    private goGet?: GoPlus.GoGet
+    private goConfig?: GoPlus.GoConfig
 
-    constructor() {
+    constructor(
+        private readonly emitter = new EventEmitter(),
+        datatip = new GoDatatipAddapter()
+    ) {
         super()
-        this.datatip = new GoDatatipAddapter()
-        this.emitter = new EventEmitter()
+        this.datatip = datatip
         this.config = {
             customServerPath: {
                 description: `Custom path to ${this.getServerName()}`,
