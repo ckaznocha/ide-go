@@ -7,13 +7,17 @@ import { EventEmitter } from 'events'
 import { join } from 'path'
 import * as pkg from '../package.json'
 import { GoPlus } from '../typings/go-plus'
-import { atomConfig, AtomPluginConfig, getProcessArgs } from './atom-config'
+import {
+    getPluginSettingValue,
+    AtomPluginSettings,
+    getProcessArgs
+} from './atom-config'
 import { TextEditor } from './datatip-adapter'
 
 const GO_READY_EVENT = Symbol('ide-go-env-ready')
 
 export class GoLanguageClient extends AutoLanguageClient {
-    private readonly config: AtomPluginConfig
+    private readonly config: AtomPluginSettings
     private goGet?: GoPlus.GoGet
     private goConfig?: GoPlus.GoConfig
 
@@ -92,7 +96,7 @@ export class GoLanguageClient extends AutoLanguageClient {
     }
 
     async serverPath(): Promise<string> {
-        let customPath = atomConfig('customServerPath')
+        let customPath = getPluginSettingValue('customServerPath')
         if (customPath !== this.config.customServerPath.default) {
             return customPath
         }
