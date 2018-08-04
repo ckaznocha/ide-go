@@ -2,14 +2,14 @@ import { Range } from 'atom'
 import { AutoLanguageClient } from 'atom-languageclient'
 import DatatipAdapter from 'atom-languageclient/build/lib/adapters/datatip-adapter'
 import { install } from 'atom-package-deps'
-import { spawn, ChildProcess } from 'child_process'
+import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
 import { join } from 'path'
 import * as pkg from '../package.json'
 import { GoPlus } from '../typings/go-plus'
 import {
-    getPluginSettingValue,
     AtomPluginSettings,
+    getPluginSettingValue,
     getProcessArgs
 } from './atom-config'
 import { TextEditor } from './datatip-adapter'
