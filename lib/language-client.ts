@@ -14,6 +14,20 @@ import {
 } from './atom-config'
 import { TextEditor } from './datatip-adapter'
 
+interface FileCodeFormatProvider {
+    grammarScopes: string[]
+    priority: number
+    formatEntireFile: (
+        exitor: TextEditor,
+        range: Range
+    ) => Promise<FileCodeFormat>
+}
+
+interface FileCodeFormat {
+    newCursor?: number
+    formatted: string
+}
+
 const GO_READY_EVENT = Symbol('ide-go-env-ready')
 
 export class GoLanguageClient extends AutoLanguageClient {
@@ -139,7 +153,7 @@ export class GoLanguageClient extends AutoLanguageClient {
         }
     }
 
-    provideFileCodeFormat() {
+    provideFileCodeFormat(): FileCodeFormatProvider {
         return {
             grammarScopes: this.getGrammarScopes(),
             priority: 1,
@@ -150,8 +164,8 @@ export class GoLanguageClient extends AutoLanguageClient {
     async getFileCodeFormat(
         editor: TextEditor,
         range: Range
-    ): Promise<{ formatted: string }> {
+    ): Promise<FileCodeFormat> {
         const format = await this.getCodeFormat(editor, range)
-        return Promise.resolve({ formatted: format[1].newText })
+        return { formatted: format[1].newText }
     }
 }
