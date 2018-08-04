@@ -56,7 +56,7 @@ export class GoLanguageClient extends AutoLanguageClient {
     async startServerProcess() {
         await install(pkg.name)
 
-        const childProcess = spawn((await this.serverPath()) as string, getProcessArgs(), {
+        const childProcess = spawn(await this.serverPath(), getProcessArgs(), {
             cwd: join(__dirname, '..'),
             env: process.env
         })
@@ -89,26 +89,36 @@ export class GoLanguageClient extends AutoLanguageClient {
         })
     }
 
-    async serverPath() {
+    async serverPath(): Promise<string> {
         let customPath = atomConfig('customServerPath')
         if (customPath !== this.config.customServerPath.default) {
             return customPath
         }
         await this.goReady()
-        let serverPath = await (this
-            .goConfig as GoPlus.GoConfig).locator.findTool(this.getServerName())
-        if (serverPath) {
-            return serverPath
+        if (!this.goConfig || !this.goGet) {
+            throw new Error('Failed to load Go environment.')
         }
-        await (this.goGet as GoPlus.GoGet).get({
-            name: pkg.name,
-            packageName: this.getServerName(),
-            packagePath: 'github.com/sourcegraph/go-langserver/',
-            type: 'missing'
-        })
-        return await (this.goConfig as GoPlus.GoConfig).locator.findTool(
+
+        let serverPath = await this.goConfig.locator.findTool(
             this.getServerName()
         )
+        if (!serverPath) {
+            await this.goGet.get({
+                name: pkg.name,
+                packageName: this.getServerName(),
+                packagePath: 'github.com/sourcegraph/go-langserver/',
+                type: 'missing'
+            })
+            serverPath = await this.goConfig.locator.findTool(
+                this.getServerName()
+            )
+        }
+
+        if (!serverPath) {
+            throw new Error('Failed to locate language server.')
+        }
+
+        return serverPath
     }
 
     onExit(code: number, _signal: string) {
