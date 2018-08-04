@@ -2,7 +2,7 @@ import { Range } from 'atom'
 import { AutoLanguageClient } from 'atom-languageclient'
 import DatatipAdapter from 'atom-languageclient/build/lib/adapters/datatip-adapter'
 import { install } from 'atom-package-deps'
-import { spawn } from 'child_process'
+import { spawn, ChildProcess } from 'child_process'
 import { EventEmitter } from 'events'
 import { join } from 'path'
 import * as pkg from '../package.json'
@@ -53,7 +53,7 @@ export class GoLanguageClient extends AutoLanguageClient {
         return 'go-langserver'
     }
 
-    async startServerProcess() {
+    async startServerProcess(): Promise<ChildProcess> {
         await install(pkg.name)
 
         const childProcess = spawn(await this.serverPath(), getProcessArgs(), {
@@ -80,7 +80,7 @@ export class GoLanguageClient extends AutoLanguageClient {
         }
     }
 
-    goReady() {
+    goReady(): Promise<void> {
         return new Promise(resolve => {
             if (this.goConfig && this.goGet) {
                 return resolve()
