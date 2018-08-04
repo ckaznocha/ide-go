@@ -80,9 +80,7 @@ export class GoLanguageClient extends AutoLanguageClient {
             cwd: join(__dirname, '..'),
             env: process.env
         })
-        childProcess.on('exit', (code: number, signal: string) =>
-            this.onExit(code, signal)
-        )
+        childProcess.on('exit', this.onExit.bind(this))
         return childProcess
     }
 
@@ -100,7 +98,7 @@ export class GoLanguageClient extends AutoLanguageClient {
         }
     }
 
-    goReady(): Promise<void> {
+    private goReady(): Promise<void> {
         return new Promise(resolve => {
             if (this.goConfig && this.goGet) {
                 return resolve()
@@ -109,7 +107,7 @@ export class GoLanguageClient extends AutoLanguageClient {
         })
     }
 
-    async serverPath(): Promise<string> {
+    private async serverPath(): Promise<string> {
         let customPath = getPluginSettingValue('customServerPath')
         if (customPath !== this.config.customServerPath.default) {
             return customPath
@@ -141,7 +139,7 @@ export class GoLanguageClient extends AutoLanguageClient {
         return serverPath
     }
 
-    onExit(code: number, _signal: string) {
+    private onExit(code: number, _signal: string) {
         if (code) {
             atom.notifications.addError(
                 `${this.getLanguageName()} language server stopped unexpectedly.`,
@@ -161,7 +159,7 @@ export class GoLanguageClient extends AutoLanguageClient {
         }
     }
 
-    async getFileCodeFormat(
+    private async getFileCodeFormat(
         editor: TextEditor,
         range: Range
     ): Promise<FileCodeFormat> {
