@@ -10,6 +10,8 @@ import { GoPlus } from '../typings/go-plus'
 import { atomConfig, AtomPluginConfig, getProcessArgs } from './atom-config'
 import { TextEditor } from './datatip-adapter'
 
+const GO_READY_EVENT = Symbol('ide-go-env-ready')
+
 export class GoLanguageClient extends AutoLanguageClient {
     private readonly config: AtomPluginConfig
     private goGet?: GoPlus.GoGet
@@ -69,14 +71,14 @@ export class GoLanguageClient extends AutoLanguageClient {
     consumeGoGet(goGet: GoPlus.GoGet) {
         this.goGet = goGet
         if (this.goConfig) {
-            this.emitter.emit('go-ready')
+            this.emitter.emit(GO_READY_EVENT)
         }
     }
 
     consumeGoConfig(goConfig: GoPlus.GoConfig) {
         this.goConfig = goConfig
         if (this.goGet) {
-            this.emitter.emit('go-ready')
+            this.emitter.emit(GO_READY_EVENT)
         }
     }
 
@@ -85,7 +87,7 @@ export class GoLanguageClient extends AutoLanguageClient {
             if (this.goConfig && this.goGet) {
                 return resolve()
             }
-            this.emitter.on('go-ready', resolve)
+            this.emitter.on(GO_READY_EVENT, resolve)
         })
     }
 
