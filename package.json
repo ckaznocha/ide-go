@@ -41,6 +41,11 @@
     "go-plus"
   ],
   "consumedServices": {
+    "console": {
+      "versions": {
+        "0.1.0": "consumeConsole"
+      }
+    },
     "atom-ide-busy-signal": {
       "versions": {
         "0.1.0": "consumeBusySignal"
