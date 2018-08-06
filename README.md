@@ -11,12 +11,13 @@ You should also install the [atom-ide-ui](https://atom.io/packages/atom-ide-ui) 
 
 ## Features
 
+*   Code Completion
 *   Code Format
+*   Diagnostics (Must be enabled in the settings)
 *   Document outline
 *   Find references
 *   Go to definition
 *   Hover
-*   Code Completion
 
 ## Contributing
 
