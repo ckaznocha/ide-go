@@ -9,6 +9,7 @@ interface AtomPluginSetting {
     type: 'string' | 'boolean'
     default: string | boolean
     order: number
+    enum?: Array<string | number>
 }
 
 export function getPluginSettingValue(key: string): string {
@@ -17,6 +18,9 @@ export function getPluginSettingValue(key: string): string {
 
 export function getProcessArgs(): string[] {
     const args: string[] = []
+
+    args.push(`-format-tool=${getPluginSettingValue('formatTool')}`)
+
     if (getPluginSettingValue('completionEnabled')) {
         args.push('-gocodecompletion')
     }

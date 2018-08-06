@@ -48,11 +48,19 @@ export class GoLanguageClient extends AutoLanguageClient {
                 default: false,
                 order: 3
             },
+            formatTool: {
+                description:
+                    'Set the format tool (requires restart)',
+                type: 'string',
+                default:'goimports',
+                order: 4,
+                enum: ['goimports','gofmt']
+            },
             pprofAddr: {
                 description: 'pprof address (requires restart)',
                 type: 'string',
                 default: '',
-                order: 3
+                order: 5
             }
         }
     }
