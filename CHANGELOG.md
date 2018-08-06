@@ -1,4 +1,8 @@
 # Changelog
+# 0.10.0
+*   `go-plus` is no longer a hard dependency, it will no longer prompt to
+    install it if you've set a path manually.
+
 # 0.9.0
 *   Support tree-sitter
 *   Support diagnostics, requires a newer version of go-langserver if you've
