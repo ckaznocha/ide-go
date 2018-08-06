@@ -1,5 +1,5 @@
-import { Disposable, Range } from 'atom'
-import { BusySignalService, BusyMessage } from 'atom-ide'
+import { Disposable } from 'atom'
+import { BusyMessage, BusySignalService } from 'atom-ide'
 import { AutoLanguageClient } from 'atom-languageclient'
 import DatatipAdapter from 'atom-languageclient/build/lib/adapters/datatip-adapter'
 import { install } from 'atom-package-deps'
@@ -49,12 +49,11 @@ export class GoLanguageClient extends AutoLanguageClient {
                 order: 3
             },
             formatTool: {
-                description:
-                    'Set the format tool (requires restart)',
+                description: 'Set the format tool (requires restart)',
                 type: 'string',
-                default:'goimports',
+                default: 'goimports',
                 order: 4,
-                enum: ['goimports','gofmt']
+                enum: ['goimports', 'gofmt']
             },
             pprofAddr: {
                 description: 'pprof address (requires restart)',
