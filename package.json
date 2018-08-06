@@ -83,9 +83,20 @@
         "2.0.0": "provideAutocomplete"
       }
     },
+    "code-actions": {
+      "versions": {
+        "0.1.0": "provideCodeActions"
+      }
+    },
+
     "code-format.file": {
       "versions": {
         "0.1.0": "provideFileCodeFormat"
+      }
+    },
+    "code-highlight": {
+      "versions": {
+        "0.1.0": "provideCodeHighlight"
       }
     },
     "definitions": {
