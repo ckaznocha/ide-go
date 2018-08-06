@@ -1,7 +1,7 @@
 {
   "name": "ide-go",
   "main": "./lib/ide-go",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Go language support for Atom-IDE.",
   "repository": "https://github.com/ckaznocha/ide-go",
   "author": {
@@ -88,7 +88,6 @@
         "0.1.0": "provideCodeActions"
       }
     },
-
     "code-format.range": {
       "versions": {
         "0.1.0": "provideCodeFormat"
