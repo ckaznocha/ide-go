@@ -89,9 +89,9 @@
       }
     },
 
-    "code-format.file": {
+    "code-format.range": {
       "versions": {
-        "0.1.0": "provideFileCodeFormat"
+        "0.1.0": "provideCodeFormat"
       }
     },
     "code-highlight": {

@@ -13,21 +13,6 @@ import {
     getPluginSettingValue,
     getProcessArgs
 } from './atom-config'
-import { TextEditor } from './datatip-adapter'
-
-interface FileCodeFormatProvider {
-    grammarScopes: string[]
-    priority: number
-    formatEntireFile: (
-        exitor: TextEditor,
-        range: Range
-    ) => Promise<FileCodeFormat>
-}
-
-interface FileCodeFormat {
-    newCursor?: number
-    formatted: string
-}
 
 const GO_READY_EVENT = Symbol('ide-go-env-ready')
 const BUSY_SIGNAL_READY_EVENT = Symbol('ide-go-busy-siganl-ready')
@@ -184,22 +169,6 @@ export class GoLanguageClient extends AutoLanguageClient {
                 }
             )
         }
-    }
-
-    provideFileCodeFormat(): FileCodeFormatProvider {
-        return {
-            grammarScopes: this.getGrammarScopes(),
-            priority: 1,
-            formatEntireFile: this.getFileCodeFormat.bind(this)
-        }
-    }
-
-    private async getFileCodeFormat(
-        editor: TextEditor,
-        range: Range
-    ): Promise<FileCodeFormat> {
-        const format = await this.getCodeFormat(editor, range)
-        return { formatted: format[1].newText }
     }
 
     private promptToInstallGoPlusIfNeeded(busy: BusyMessage) {

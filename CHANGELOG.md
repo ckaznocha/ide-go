@@ -2,6 +2,8 @@
 # 0.10.0
 *   `go-plus` is no longer a hard dependency, it will no longer prompt to
     install it if you've set a to go-langserver path manually.
+*   Use `range` code formatting. Code format will no longer work unless you have
+    the latest version of go-langserver.
 
 # 0.9.0
 *   Support tree-sitter
