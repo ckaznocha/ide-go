@@ -78,9 +78,8 @@ export class GoLanguageClient extends AutoLanguageClient {
         return params
     }
 
-    mapConfigurationObject(configuration: any): any {
+    mapConfigurationObject(_configuration: any): any {
         this.restartAllServers()
-        return configuration
     }
 
     async startServerProcess(): Promise<ChildProcess> {
