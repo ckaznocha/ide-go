@@ -1,5 +1,6 @@
 import { BusyMessage } from 'atom-ide'
 import { install } from 'atom-package-deps'
+import { execSync, SpawnSyncReturns } from 'child_process'
 import { GoPlus } from '../typings/go-plus'
 
 export async function findOrInstallGoLangserver(
@@ -60,4 +61,34 @@ If not, you'll need to set a custom path your '${serverName}' binary and restart
             }
         )
     }
+}
+
+export async function promptToUpdateWithGoPlus(
+    serverName: string,
+    goGet: GoPlus.GoGet
+) {
+    await goGet.get({
+        name: name,
+        packageName: serverName,
+        packagePath: 'github.com/sourcegraph/go-langserver/',
+        type: 'outdated'
+    })
+}
+
+export function promptToUpgradeManually() {
+    atom.notifications.addWarning('ide-go: go-langserver is outdated', {
+        detail: 'Your version of go-langserver is outdated. Please update it.',
+        description: 'Some features may not work correctly',
+        dismissable: true
+    })
+}
+
+export function shouldUpgrade(serverPath: string) {
+    let buf: Buffer
+    try {
+        buf = execSync(`${serverPath} -help`)
+    } catch (e) {
+        buf = (e as SpawnSyncReturns<Buffer>).stderr
+    }
+    return buf.indexOf('-format-tool') < 0
 }

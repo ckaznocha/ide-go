@@ -5,6 +5,7 @@
 *   Add setting for `goimports Local Prefix`.
 *   Add setting for `Use Binary Pkg Cache`.
 *   Add setting for `Format Tool`.
+*   Prompt to update older versions of `go-langsrever`.
 
 # 0.10.0
 *   `go-plus` is no longer a hard dependency, it will no longer prompt to

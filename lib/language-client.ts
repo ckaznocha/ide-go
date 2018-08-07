@@ -16,7 +16,10 @@ import {
 } from './atom-config'
 import {
     findOrInstallGoLangserver,
-    promptToInstallGoPlusIfNeeded
+    promptToInstallGoPlusIfNeeded,
+    promptToUpdateWithGoPlus,
+    promptToUpgradeManually,
+    shouldUpgrade
 } from './go-env'
 
 interface InitializationOptions {
@@ -134,6 +137,9 @@ export class GoLanguageClient extends AutoLanguageClient {
         )
         let customPath = getPluginSettingValue('customServerPath')
         if (customPath !== this.config.customServerPath.default) {
+            if (shouldUpgrade(customPath)) {
+                promptToUpgradeManually()
+            }
             busy.dispose()
             return customPath
         }
@@ -157,7 +163,9 @@ export class GoLanguageClient extends AutoLanguageClient {
         if (!serverPath) {
             throw new Error('Failed to locate language server.')
         }
-
+        if (shouldUpgrade(serverPath)) {
+            await promptToUpdateWithGoPlus(this.getServerName(), this.goGet)
+        }
         return serverPath
     }
 
