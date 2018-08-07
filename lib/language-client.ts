@@ -1,10 +1,9 @@
 import { Disposable } from 'atom'
-import { BusyMessage, BusySignalService } from 'atom-ide'
+import { BusySignalService } from 'atom-ide'
 import { AutoLanguageClient } from 'atom-languageclient'
 import { LanguageServerProcess } from 'atom-languageclient/build/lib//server-manager.js'
 import DatatipAdapter from 'atom-languageclient/build/lib/adapters/datatip-adapter'
 import { InitializeParams } from 'atom-languageclient/build/lib/languageclient'
-import { install } from 'atom-package-deps'
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
 import { join } from 'path'
@@ -15,6 +14,10 @@ import {
     getPluginSettingValue,
     getProcessArgs
 } from './atom-config'
+import {
+    findOrInstallGoLangserver,
+    promptToInstallGoPlusIfNeeded
+} from './go-env'
 
 interface InitializationOptions {
     funcSnippetEnabled?: boolean
@@ -29,7 +32,7 @@ const GO_READY_EVENT = Symbol('ide-go-env-ready')
 const BUSY_SIGNAL_READY_EVENT = Symbol('ide-go-busy-siganl-ready')
 
 export class GoLanguageClient extends AutoLanguageClient {
-    private readonly config: AtomPluginSettings
+    readonly config: AtomPluginSettings = pkg.packageSettings
     private goGet?: GoPlus.GoGet
     private goConfig?: GoPlus.GoConfig
 
@@ -39,9 +42,6 @@ export class GoLanguageClient extends AutoLanguageClient {
     ) {
         super()
         this.datatip = datatip
-        const config = pkg.packageSettings
-        config.customServerPath.default = this.getServerName()
-        this.config = config
     }
 
     getGrammarScopes(): string[] {
@@ -138,7 +138,7 @@ export class GoLanguageClient extends AutoLanguageClient {
             return customPath
         }
 
-        this.promptToInstallGoPlusIfNeeded(busy)
+        promptToInstallGoPlusIfNeeded(pkg.name, this.getServerName(), busy)
 
         busy.setTitle(`Waiting for Go env`)
         await this.goReady()
@@ -146,28 +146,17 @@ export class GoLanguageClient extends AutoLanguageClient {
             throw new Error('Failed to load Go environment.')
         }
 
-        busy.setTitle(`Looking for ${this.getServerName()}`)
-        let serverPath = await this.goConfig.locator.findTool(
-            this.getServerName()
+        let serverPath = await findOrInstallGoLangserver(
+            pkg.name,
+            this.getServerName(),
+            this.goConfig,
+            this.goGet,
+            busy
         )
-        if (!serverPath) {
-            busy.setTitle(`installing ${this.getServerName()}`)
-            await this.goGet.get({
-                name: pkg.name,
-                packageName: this.getServerName(),
-                packagePath: 'github.com/sourcegraph/go-langserver/',
-                type: 'missing'
-            })
-            busy.setTitle(`Looking for ${this.getServerName()}`)
-            serverPath = await this.goConfig.locator.findTool(
-                this.getServerName()
-            )
-        }
 
         if (!serverPath) {
             throw new Error('Failed to locate language server.')
         }
-        busy.dispose()
 
         return serverPath
     }
@@ -179,37 +168,6 @@ export class GoLanguageClient extends AutoLanguageClient {
                 {
                     dismissable: true,
                     description: `Exit code: ${code}\n${this.processStdErr}`
-                }
-            )
-        }
-    }
-
-    private promptToInstallGoPlusIfNeeded(busy: BusyMessage) {
-        if (!atom.packages.isPackageLoaded('go-plus')) {
-            busy.setTitle('Waitin to install go-plus')
-            let notification = atom.notifications.addInfo(
-                'ide-go: Install go-plus?',
-                {
-                    buttons: [
-                        {
-                            onDidClick: async () => {
-                                notification.dismiss()
-                                busy.setTitle('Installing go-plus')
-                                await install(pkg.name)
-                            },
-                            text: 'Yes'
-                        },
-                        {
-                            onDidClick: () => {
-                                notification.dismiss()
-                            },
-                            text: "I'll set the path myself"
-                        }
-                    ],
-                    detail: `go-plus is used to install the latest version of ${this.getServerName()}`,
-                    description: `If yes, click 'yes' on the next prompt.\n
-If not, you'll need to set a custom path your '${this.getServerName()}' binary and restart atom before 'ide-go' will work.`,
-                    dismissable: true
                 }
             )
         }
