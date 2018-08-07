@@ -6,7 +6,7 @@ export interface AtomPluginSettings {
 
 interface AtomPluginSetting {
     description: string
-    type: 'string' | 'boolean'
+    type: string
     default: string | boolean
     order: number
     enum?: Array<string | number>

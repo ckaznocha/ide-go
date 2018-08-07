@@ -39,60 +39,9 @@ export class GoLanguageClient extends AutoLanguageClient {
     ) {
         super()
         this.datatip = datatip
-        this.config = {
-            customServerPath: {
-                description: `Custom path to ${this.getServerName()}`,
-                type: 'string',
-                default: this.getServerName(),
-                order: 1
-            },
-            completionEnabled: {
-                description: 'Enable code completion',
-                type: 'boolean',
-                default: true,
-                order: 2
-            },
-            diagnosticsEnabled: {
-                description: 'Enable diagnostics (extra memory burden)',
-                type: 'boolean',
-                default: false,
-                order: 3
-            },
-            funcSnippetEnabled: {
-                description:
-                    'Enables the returning of argument snippets on `func` completions, eg. func(foo string, arg2 bar). Requires code completion to be enabled.',
-                type: 'boolean',
-                default: true,
-                order: 4
-            },
-            goimportsLocalPrefix: {
-                description:
-                    'Sets the local prefix (comma-separated string) that goimports will use',
-                type: 'string',
-                default: '',
-                order: 5
-            },
-            useBinaryPkgCache: {
-                description:
-                    'Controls whether or not $GOPATH/pkg binary .a files shouldbe used',
-                type: 'boolean',
-                default: true,
-                order: 6
-            },
-            formatTool: {
-                description: 'Set the format tool',
-                type: 'string',
-                default: 'goimports',
-                order: 7,
-                enum: ['goimports', 'gofmt']
-            },
-            pprofAddr: {
-                description: 'pprof address',
-                type: 'string',
-                default: '',
-                order: 8
-            }
-        }
+        const config = pkg.packageSettings
+        config.customServerPath.default = this.getServerName()
+        this.config = config
     }
 
     getGrammarScopes(): string[] {
