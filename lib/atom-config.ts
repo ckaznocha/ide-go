@@ -19,12 +19,6 @@ export function getPluginSettingValue(key: string): string {
 export function getProcessArgs(): string[] {
     const args: string[] = []
 
-    args.push(`-format-tool=${getPluginSettingValue('formatTool')}`)
-
-    if (getPluginSettingValue('completionEnabled')) {
-        args.push('-gocodecompletion')
-    }
-
     if (getPluginSettingValue('diagnosticsEnabled')) {
         args.push('-diagnostics')
     }

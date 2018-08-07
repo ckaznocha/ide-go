@@ -1,4 +1,11 @@
 # Changelog
+# 0.11.0
+*   Setting changes no longer require you to restart atom.
+*   Add setting for `Func Snippet Enabled`.
+*   Add setting for `goimports Local Prefix`.
+*   Add setting for `Use Binary Pkg Cache`.
+*   Add setting for `Format Tool`.
+
 # 0.10.0
 *   `go-plus` is no longer a hard dependency, it will no longer prompt to
     install it if you've set a to go-langserver path manually.

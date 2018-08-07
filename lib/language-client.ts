@@ -1,7 +1,9 @@
 import { Disposable } from 'atom'
 import { BusyMessage, BusySignalService } from 'atom-ide'
 import { AutoLanguageClient } from 'atom-languageclient'
+import { LanguageServerProcess } from 'atom-languageclient/build/lib//server-manager.js'
 import DatatipAdapter from 'atom-languageclient/build/lib/adapters/datatip-adapter'
+import { InitializeParams } from 'atom-languageclient/build/lib/languageclient'
 import { install } from 'atom-package-deps'
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
@@ -13,6 +15,15 @@ import {
     getPluginSettingValue,
     getProcessArgs
 } from './atom-config'
+
+interface InitializationOptions {
+    funcSnippetEnabled?: boolean
+    gocodeCompletionEnabled?: boolean
+    formatTool?: string
+    goimportsLocalPrefix?: string
+    maxParallelism?: number
+    useBinaryPkgCache?: boolean
+}
 
 const GO_READY_EVENT = Symbol('ide-go-env-ready')
 const BUSY_SIGNAL_READY_EVENT = Symbol('ide-go-busy-siganl-ready')
@@ -36,30 +47,50 @@ export class GoLanguageClient extends AutoLanguageClient {
                 order: 1
             },
             completionEnabled: {
-                description: 'Enable code completion (requires restart)',
+                description: 'Enable code completion',
                 type: 'boolean',
                 default: true,
                 order: 2
             },
             diagnosticsEnabled: {
-                description:
-                    'Enable diagnostics (extra memory burden) (requires restart)',
+                description: 'Enable diagnostics (extra memory burden)',
                 type: 'boolean',
                 default: false,
                 order: 3
             },
-            formatTool: {
-                description: 'Set the format tool (requires restart)',
-                type: 'string',
-                default: 'goimports',
-                order: 4,
-                enum: ['goimports', 'gofmt']
+            funcSnippetEnabled: {
+                description:
+                    'Enables the returning of argument snippets on `func` completions, eg. func(foo string, arg2 bar). Requires code completion to be enabled.',
+                type: 'boolean',
+                default: true,
+                order: 4
             },
-            pprofAddr: {
-                description: 'pprof address (requires restart)',
+            goimportsLocalPrefix: {
+                description:
+                    'Sets the local prefix (comma-separated string) that goimports will use',
                 type: 'string',
                 default: '',
                 order: 5
+            },
+            useBinaryPkgCache: {
+                description:
+                    'Controls whether or not $GOPATH/pkg binary .a files shouldbe used',
+                type: 'boolean',
+                default: true,
+                order: 6
+            },
+            formatTool: {
+                description: 'Set the format tool',
+                type: 'string',
+                default: 'goimports',
+                order: 7,
+                enum: ['goimports', 'gofmt']
+            },
+            pprofAddr: {
+                description: 'pprof address',
+                type: 'string',
+                default: '',
+                order: 8
             }
         }
     }
@@ -72,6 +103,32 @@ export class GoLanguageClient extends AutoLanguageClient {
     }
     getServerName(): string {
         return 'go-langserver'
+    }
+
+    getRootConfigurationKey(): string {
+        return pkg.name
+    }
+
+    getInitializeParams(
+        projectPath: string,
+        process: LanguageServerProcess
+    ): InitializeParams {
+        const params = super.getInitializeParams(projectPath, process)
+        params.initializationOptions = {
+            funcSnippetEnabled: !!getPluginSettingValue('funcSnippetEnabled'),
+            gocodeCompletionEnabled: !!getPluginSettingValue(
+                'completionEnabled'
+            ),
+            formatTool: getPluginSettingValue('formatTool'),
+            goimportsLocalPrefix: getPluginSettingValue('goimportsLocalPrefix'),
+            useBinaryPkgCache: !!getPluginSettingValue('useBinaryPkgCache')
+        } as InitializationOptions
+        return params
+    }
+
+    mapConfigurationObject(configuration: any): any {
+        this.restartAllServers()
+        return configuration
     }
 
     async startServerProcess(): Promise<ChildProcess> {
