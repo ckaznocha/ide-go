@@ -1,4 +1,8 @@
 # Changelog
+
+# 0.12.0
+*   Same as 0.11.0, I messed up `apm publish` on the last version.
+
 # 0.11.0
 *   Setting changes no longer require you to restart atom.
 *   Add setting for `Func Snippet Enabled`.
