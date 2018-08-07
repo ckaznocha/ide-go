@@ -39,9 +39,9 @@
   ],
   "packageSettings": {
     "customServerPath": {
-      "description": "Custom path to go-langserver",
+      "description": "Custom path to `go-langserver` executable",
       "type": "string",
-      "default": "",
+      "default": "'go-langserver",
       "order": 1
     },
     "completionEnabled": {
@@ -57,19 +57,19 @@
       "order": 3
     },
     "funcSnippetEnabled": {
-      "description": "Enables the returning of argument snippets on `func` completions, eg. func(foo string, arg2 bar). Requires code completion to be enabled.",
+      "description": "Enables the returning of argument snippets on `func` completions, eg. `func(foo string, arg2 bar)`. Requires code completion to be enabled.",
       "type": "boolean",
       "default": true,
       "order": 4
     },
     "goimportsLocalPrefix": {
-      "description": "Sets the local prefix (comma-separated string) that goimports will use",
+      "description": "Sets the local prefix (comma-separated string) that `goimports` will use",
       "type": "string",
       "default": "",
       "order": 5
     },
     "useBinaryPkgCache": {
-      "description": "Controls whether or not $GOPATH/pkg binary .a files shouldbe used",
+      "description": "Controls whether or not $GOPATH/pkg binary .a files should be used",
       "type": "boolean",
       "default": true,
       "order": 6
