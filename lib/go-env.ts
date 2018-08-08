@@ -4,7 +4,7 @@ import { execSync, SpawnSyncReturns } from 'child_process'
 import { GoPlus } from '../typings/go-plus'
 
 export async function findOrInstallGoLangserver(
-    name: string,
+    pluginName: string,
     serverName: string,
     goConfig: GoPlus.GoConfig,
     goGet: GoPlus.GoGet,
@@ -16,7 +16,7 @@ export async function findOrInstallGoLangserver(
     if (!serverPath) {
         busy.setTitle(`installing ${serverName}`)
         await goGet.get({
-            name: name,
+            name: pluginName,
             packageName: serverName,
             packagePath: 'github.com/sourcegraph/go-langserver/',
             type: 'missing'
@@ -29,7 +29,7 @@ export async function findOrInstallGoLangserver(
 }
 
 export async function promptToInstallGoPlusIfNeeded(
-    name: string,
+    pluginName: string,
     serverName: string,
     busy: BusyMessage
 ) {
@@ -43,7 +43,7 @@ export async function promptToInstallGoPlusIfNeeded(
                         onDidClick: async () => {
                             notification.dismiss()
                             busy.setTitle('Installing go-plus')
-                            await install(name)
+                            await install(pluginName)
                         },
                         text: 'Yes'
                     },
@@ -64,11 +64,12 @@ If not, you'll need to set a custom path your '${serverName}' binary and restart
 }
 
 export async function promptToUpdateWithGoPlus(
+    pluginName:string,
     serverName: string,
     goGet: GoPlus.GoGet
 ) {
     await goGet.get({
-        name: name,
+        name: pluginName,
         packageName: serverName,
         packagePath: 'github.com/sourcegraph/go-langserver/',
         type: 'outdated'

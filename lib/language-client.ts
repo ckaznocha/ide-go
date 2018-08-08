@@ -163,7 +163,11 @@ export class GoLanguageClient extends AutoLanguageClient {
             throw new Error('Failed to locate language server.')
         }
         if (shouldUpgrade(serverPath)) {
-            await promptToUpdateWithGoPlus(this.getServerName(), this.goGet)
+            await promptToUpdateWithGoPlus(
+                pkg.name,
+                this.getServerName(),
+                this.goGet
+            )
         }
         return serverPath
     }
