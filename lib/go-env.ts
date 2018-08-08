@@ -3,6 +3,8 @@ import { install } from 'atom-package-deps'
 import { execSync, SpawnSyncReturns } from 'child_process'
 import { GoPlus } from '../typings/go-plus'
 
+const GO_PACKAGE_PATH = 'github.com/sourcegraph/go-langserver/'
+
 export async function findOrInstallGoLangserver(
     pluginName: string,
     serverName: string,
@@ -18,7 +20,7 @@ export async function findOrInstallGoLangserver(
         await goGet.get({
             name: pluginName,
             packageName: serverName,
-            packagePath: 'github.com/sourcegraph/go-langserver/',
+            packagePath: GO_PACKAGE_PATH,
             type: 'missing'
         })
         busy.setTitle(`Looking for ${serverName}`)
@@ -71,7 +73,7 @@ export async function promptToUpdateWithGoPlus(
     await goGet.get({
         name: pluginName,
         packageName: serverName,
-        packagePath: 'github.com/sourcegraph/go-langserver/',
+        packagePath: GO_PACKAGE_PATH,
         type: 'outdated'
     })
 }
