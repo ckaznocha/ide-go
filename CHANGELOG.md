@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.12.1
+*   Fixes broken datatips from latest version of atom-languageclient
+    [@lloiser](https://github.com/lloiser)
+
 # 0.12.0
 *   Same as 0.11.0, I messed up `apm publish` on the last version.
 
