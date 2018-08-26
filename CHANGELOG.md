@@ -1,6 +1,6 @@
 # Changelog
 
-# 0.12.1
+# 0.12.3
 *   Fixes broken datatips from latest version of atom-languageclient
     [@lloiser](https://github.com/lloiser)
 
