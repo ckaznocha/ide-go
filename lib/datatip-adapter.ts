@@ -1,15 +1,8 @@
-import { Point, ScopeDescriptor, TextBuffer, TextEditor as NativeTextEditor } from 'atom';
+import { Point, TextEditor } from 'atom';
 import { Datatip } from 'atom-ide';
 import DatatipAdapter from 'atom-languageclient/build/lib/adapters/datatip-adapter';
 import { LanguageClientConnection } from 'atom-languageclient/build/lib/languageclient';
-import Utils from 'atom-languageclient/build/lib/utils';
-
-
-export interface TextEditor extends NativeTextEditor {
-    getURI(): string | null
-    getBuffer(): TextBuffer
-    getNonWordCharacters(scope: ScopeDescriptor): string
-}
+import * as Utils from 'atom-languageclient/build/lib/utils';
 
 export class GoDatatipAddapter extends DatatipAdapter {
     async getDatatip(
