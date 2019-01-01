@@ -5,23 +5,24 @@ import { GoPlus } from '../typings/go-plus'
 
 const GO_PACKAGE_PATH = 'github.com/sourcegraph/go-langserver/'
 
-export async function findOrInstallGoLangserver(
+/** Finds the path to the lsp or installs it. */
+export const findOrInstallGoLangserver = async (
     pluginName: string,
     serverName: string,
     goConfig: GoPlus.GoConfig,
     goGet: GoPlus.GoGet,
     busy: BusyMessage
-): Promise<GoPlus.FindResult> {
+): Promise<GoPlus.FindResult> => {
     busy.setTitle(`Looking for ${serverName}`)
 
     let serverPath = await goConfig.locator.findTool(serverName)
-    if (!serverPath) {
+    if (serverPath === false) {
         busy.setTitle(`installing ${serverName}`)
         await goGet.get({
             name: pluginName,
             packageName: serverName,
             packagePath: GO_PACKAGE_PATH,
-            type: 'missing'
+            type: 'missing',
         })
         busy.setTitle(`Looking for ${serverName}`)
         serverPath = await goConfig.locator.findTool(serverName)
@@ -30,63 +31,67 @@ export async function findOrInstallGoLangserver(
     return serverPath
 }
 
-export async function promptToInstallGoPlusIfNeeded(
+/** Prompts the user to install the lsp if it isn't found. */
+export const promptToInstallGoPlusIfNeeded = async (
     pluginName: string,
     serverName: string,
     busy: BusyMessage
-) {
+): Promise<void> => {
     if (!atom.packages.isPackageLoaded('go-plus')) {
-        busy.setTitle('Waitin to install go-plus')
-        let notification = atom.notifications.addInfo(
+        busy.setTitle('Waiting to install go-plus')
+        const notification = atom.notifications.addInfo(
             'ide-go: Install go-plus?',
             {
                 buttons: [
                     {
-                        onDidClick: async () => {
+                        onDidClick: (): void => {
                             notification.dismiss()
                             busy.setTitle('Installing go-plus')
-                            await install(pluginName)
+                            install(pluginName)
                         },
-                        text: 'Yes'
+                        text: 'Yes',
                     },
                     {
-                        onDidClick: () => {
+                        onDidClick: (): void => {
                             notification.dismiss()
                         },
-                        text: "I'll set the path myself"
-                    }
+                        text: "I'll set the path myself",
+                    },
                 ],
-                detail: `go-plus is used to install the latest version of ${serverName}`,
                 description: `If yes, click 'yes' on the next prompt.\n
 If not, you'll need to set a custom path your '${serverName}' binary and restart atom before 'ide-go' will work.`,
-                dismissable: true
+                detail: `go-plus is used to install the latest version of ${serverName}`,
+                dismissable: true,
             }
         )
     }
 }
 
-export async function promptToUpdateWithGoPlus(
-    pluginName:string,
+/** Prompts the user to upgrade the lsp using go plus. */
+export const promptToUpdateWithGoPlus = async (
+    pluginName: string,
     serverName: string,
     goGet: GoPlus.GoGet
-) {
+): Promise<void> => {
     await goGet.get({
         name: pluginName,
         packageName: serverName,
         packagePath: GO_PACKAGE_PATH,
-        type: 'outdated'
+        type: 'outdated',
     })
 }
 
-export function promptToUpgradeManually() {
+/** Prompts the user to upgrade the lsp manually. */
+export const promptToUpgradeManually = (): void => {
     atom.notifications.addWarning('ide-go: go-langserver is outdated', {
-        detail: 'Your version of go-langserver is outdated. Please update it.',
         description: 'Some features may not work correctly',
-        dismissable: true
+        detail: 'Your version of go-langserver is outdated. Please update it.',
+        dismissable: true,
     })
 }
 
-export function shouldUpgrade(serverPath: string) {
+/** Detects if the lsp should be upgraded. */
+export const shouldUpgrade = (serverPath: string): boolean => {
     let buf: Buffer
     try {
         buf = execSync(`${serverPath} -help`)

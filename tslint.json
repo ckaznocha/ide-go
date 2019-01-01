@@ -1,0 +1,59 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:all",
+        "tslint-config-standard",
+        "tslint-config-prettier"
+    ],
+    "jsRules": {},
+    "rules": {
+        "interface-name": [true, "never-prefix"],
+        "no-submodule-imports": [true, "atom-languageclient"],
+        "file-name-casing": [true, "kebab-case"],
+        "no-implicit-dependencies": false,
+        "strict-boolean-expressions": [
+            true,
+            "allow-null-union",
+            "allow-undefined-union",
+            "allow-string",
+            "allow-enum",
+            "allow-number"
+        ],
+        "typedef": [
+            true,
+            "call-signature",
+            "arrow-call-signature",
+            "parameter",
+            "arrow-parameter",
+            "member-variable-declaration",
+            "property-declaration",
+            "object-destructuring",
+            "array-destructuring"
+        ],
+        "no-parameter-properties": false,
+        "newline-before-return": false,
+        "no-unused-variable": false,
+        "prefer-function-over-method": [
+            true,
+            "allow-public",
+            "allow-protected"
+        ],
+        "completed-docs": [
+            true,
+            {
+                "enums": { "visibilities": ["exported"] },
+                "variables": { "visibilities": ["exported"] },
+                "functions": { "visibilities": ["exported"] },
+                "interfaces": { "visibilities": ["exported"] },
+                "methods": {
+                    "privacies": ["public", "protected"]
+                },
+                "properties": {
+                    "locations": "instance",
+                    "privacies": ["public", "protected"]
+                }
+            }
+        ]
+    },
+    "rulesDirectory": []
+}

@@ -1,22 +1,25 @@
 import * as pkg from '../package.json'
 
+/** An object of plugin settings. */
 export interface AtomPluginSettings {
     [key: string]: AtomPluginSetting
 }
 
 interface AtomPluginSetting {
-    description: string
-    type: string
     default: string | boolean
-    order: number
+    description: string
     enum?: Array<string | number>
+    order: number
+    type: string
 }
 
-export function getPluginSettingValue(key: string): string {
-    return atom.config.get(`${pkg.name}.${key}`)
-}
+/** Get the value of a setting for this plugin. */
+export const getPluginSettingValue = (key: string): string =>
+    // tslint:disable-next-line: no-unsafe-any
+    atom.config.get(`${pkg.name}.${key}`)
 
-export function getProcessArgs(): string[] {
+/** Creates a string of arguments to pass to the process. */
+export const getProcessArgs = (): string[] => {
     const args: string[] = []
 
     if (getPluginSettingValue('diagnosticsEnabled')) {

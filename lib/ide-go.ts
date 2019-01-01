@@ -1,5 +1,8 @@
-import { EventEmitter } from 'events';
-import { GoDatatipAddapter } from './datatip-adapter';
-import { GoLanguageClient } from './language-client';
+import { EventEmitter } from 'events'
+import { GoDatatipAdapter } from './datatip-adapter'
+import { GoLanguageClient } from './language-client'
 
-module.exports = new GoLanguageClient(new EventEmitter(), new GoDatatipAddapter())
+module.exports = new GoLanguageClient(
+    new EventEmitter(),
+    new GoDatatipAdapter()
+)
