@@ -21,6 +21,10 @@
     "language-server-protocol",
     "lsp"
   ],
+  "scripts": {
+    "format": "prettier --write 'lib/**/*.ts' && tslint -p . --fix --force -e package.json",
+    "lint": "tslint -p . -t verbose -e package.json"
+  },
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
@@ -30,8 +34,14 @@
     "@types/node": "^10.9.2",
     "atom-languageclient": "^0.9.6",
     "atom-package-deps": "^5.0.0",
-    "atom-ts-transpiler": "^1.5.2",
-    "typescript": "^3.0.1"
+    "atom-ts-transpiler": "^1.5.2"
+  },
+  "devDependencies": {
+    "prettier": "^1.15.3",
+    "tslint": "^5.12.0",
+    "tslint-config-prettier": "^1.17.0",
+    "tslint-config-standard": "^8.0.1",
+    "typescript": "^3.2.2"
   },
   "enhancedScopes": [
     "go",
