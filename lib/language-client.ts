@@ -7,6 +7,7 @@ import { InitializeParams } from 'atom-languageclient/build/lib/languageclient'
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
 import { join } from 'path'
+import { injectable } from 'tsyringe'
 import * as pkg from '../package.json'
 import { GoPlus } from '../typings/go-plus'
 import {
@@ -35,6 +36,7 @@ const GO_READY_EVENT = Symbol('ide-go-env-ready')
 const BUSY_SIGNAL_READY_EVENT = Symbol('ide-go-busy-signal-ready')
 
 /** Language client for go-langserver. */
+@injectable()
 export class GoLanguageClient extends AutoLanguageClient {
     public readonly config: AtomPluginSettings = pkg.packageSettings
     private goConfig?: GoPlus.GoConfig

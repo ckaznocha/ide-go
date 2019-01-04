@@ -34,7 +34,9 @@
     "@types/node": "^10.9.2",
     "atom-languageclient": "^0.9.6",
     "atom-package-deps": "^5.0.0",
-    "atom-ts-transpiler": "^1.5.2"
+    "atom-ts-transpiler": "^1.5.2",
+    "reflect-metadata": "^0.1.12",
+    "tsyringe": "^3.0.1"
   },
   "devDependencies": {
     "prettier": "^1.15.3",
