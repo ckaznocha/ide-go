@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@types/atom": "^1.28.0",
-    "@types/node": "^10.9.2",
+    "@types/node": "^11.12.0",
     "atom-languageclient": "^0.9.6",
     "atom-package-deps": "^5.0.0",
     "atom-ts-transpiler": "^1.5.2",
