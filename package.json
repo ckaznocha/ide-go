@@ -30,7 +30,7 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-    "@types/atom": "^1.28.0",
+    "@types/atom": "^1.40.3",
     "@types/node": "^13.1.1",
     "atom-languageclient": "^0.9.6",
     "atom-package-deps": "^5.0.0",
